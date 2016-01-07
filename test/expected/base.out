@@ -1,0 +1,122 @@
+\set ECHO none
+CREATE TABLE usa_abartns(id serial primary key, usa_abartn usa_abartn unique);
+INSERT INTO usa_abartns(usa_abartn) VALUES('001234561');
+INSERT INTO usa_abartns(usa_abartn) VALUES('000000000');
+INSERT INTO usa_abartns(usa_abartn) VALUES('008099990');
+SELECT * FROM usa_abartns ORDER BY usa_abartn;
+ id | usa_abartn 
+----+------------
+  2 | 000000000
+  1 | 001234561
+  3 | 008099990
+(3 rows)
+
+-- index scan
+SET enable_seqscan = false;
+SELECT id,usa_abartn::text FROM usa_abartns WHERE usa_abartn = '001234561';
+ id | usa_abartn 
+----+------------
+  1 | 001234561
+(1 row)
+
+SELECT id,usa_abartn FROM usa_abartns WHERE usa_abartn >= '001234561' LIMIT 5;
+ id | usa_abartn 
+----+------------
+  1 | 001234561
+  3 | 008099990
+(2 rows)
+
+SELECT count(id) FROM usa_abartns;
+ count 
+-------
+     3
+(1 row)
+
+SELECT count(id) FROM usa_abartns WHERE usa_abartn <> ('001234561'::text)::usa_abartn;
+ count 
+-------
+     2
+(1 row)
+
+RESET enable_seqscan;
+-- operators and conversions
+SELECT '000000000'::usa_abartn < '000000000'::usa_abartn;
+ ?column? 
+----------
+ f
+(1 row)
+
+SELECT '000000000'::usa_abartn > '000000000'::usa_abartn;
+ ?column? 
+----------
+ f
+(1 row)
+
+SELECT '000000000'::usa_abartn < '008099990'::usa_abartn;
+ ?column? 
+----------
+ t
+(1 row)
+
+SELECT '000000000'::usa_abartn > '008099990'::usa_abartn;
+ ?column? 
+----------
+ f
+(1 row)
+
+SELECT '000000000'::usa_abartn <= '000000000'::usa_abartn;
+ ?column? 
+----------
+ t
+(1 row)
+
+SELECT '000000000'::usa_abartn >= '000000000'::usa_abartn;
+ ?column? 
+----------
+ t
+(1 row)
+
+SELECT '000000000'::usa_abartn <= '008099990'::usa_abartn;
+ ?column? 
+----------
+ t
+(1 row)
+
+SELECT '000000000'::usa_abartn >= '008099990'::usa_abartn;
+ ?column? 
+----------
+ f
+(1 row)
+
+SELECT '000000000'::usa_abartn <> '000000000'::usa_abartn;
+ ?column? 
+----------
+ f
+(1 row)
+
+SELECT '000000000'::usa_abartn <> '008099990'::usa_abartn;
+ ?column? 
+----------
+ t
+(1 row)
+
+SELECT '000000000'::usa_abartn = '000000000'::usa_abartn;
+ ?column? 
+----------
+ t
+(1 row)
+
+SELECT '000000000'::usa_abartn = '008099990'::usa_abartn;
+ ?column? 
+----------
+ f
+(1 row)
+
+-- COPY FROM/TO
+TRUNCATE usa_abartns;
+COPY usa_abartns(usa_abartn) FROM STDIN;
+COPY usa_abartns TO STDOUT;
+4	000000000
+5	008099990
+-- clean up --
+DROP TABLE usa_abartns;
