@@ -19,7 +19,7 @@ typedef uint32 usa_abartn_t;
 Datum usa_abartn_in(PG_FUNCTION_ARGS);
 Datum usa_abartn_out(PG_FUNCTION_ARGS);
 Datum usa_abartn_to_text(PG_FUNCTION_ARGS);
-Datum text_to_usa_abartn(PG_FUNCTION_ARGS);
+Datum usa_abartn_from_text(PG_FUNCTION_ARGS);
 Datum usa_abartn_send(PG_FUNCTION_ARGS);
 Datum usa_abartn_recv(PG_FUNCTION_ARGS);
 Datum usa_abartn_lt(PG_FUNCTION_ARGS);
@@ -77,9 +77,9 @@ usa_abartn_to_text(PG_FUNCTION_ARGS)
 	PG_RETURN_TEXT_P(usa_abartn_text);
 }
 
-PG_FUNCTION_INFO_V1(text_to_usa_abartn);
+PG_FUNCTION_INFO_V1(usa_abartn_from_text);
 Datum
-text_to_usa_abartn(PG_FUNCTION_ARGS)
+usa_abartn_from_text(PG_FUNCTION_ARGS)
 {
 	text  *usa_abartn_text = PG_GETARG_TEXT_P(0);
 	char  *usa_abartn_str = DatumGetCString(DirectFunctionCall1(textout, PointerGetDatum(usa_abartn_text)));

@@ -47,7 +47,7 @@ LANGUAGE C IMMUTABLE STRICT;
 -- to/from text conversion
 CREATE OR REPLACE FUNCTION usa_abartn_to_text(usa_abartn) RETURNS text AS '$libdir/usa_abartn'
 LANGUAGE C IMMUTABLE STRICT;
-CREATE OR REPLACE FUNCTION text_to_usa_abartn(text) RETURNS usa_abartn AS '$libdir/usa_abartn'
+CREATE OR REPLACE FUNCTION usa_abartn_from_text(text) RETURNS usa_abartn AS '$libdir/usa_abartn'
 LANGUAGE C IMMUTABLE STRICT;
 
 -- operators
@@ -116,7 +116,7 @@ CREATE OPERATOR CLASS usa_abartn_ops DEFAULT FOR TYPE usa_abartn USING btree AS
 	FUNCTION 1 usa_abartn_cmp(usa_abartn, usa_abartn);
 -- cast from/to text
 CREATE CAST (usa_abartn AS text) WITH FUNCTION usa_abartn_to_text(usa_abartn) AS ASSIGNMENT;
-CREATE CAST (text AS usa_abartn) WITH FUNCTION text_to_usa_abartn(text) AS ASSIGNMENT;
+CREATE CAST (text AS usa_abartn) WITH FUNCTION usa_abartn_from_text(text) AS ASSIGNMENT;
 
 /* Does this survive a pg_dump?
 CREATE CAST (int        AS usa_abartn) WITHOUT FUNCTION AS ASSIGNMENT;
